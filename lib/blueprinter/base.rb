@@ -296,6 +296,44 @@ module Blueprinter
       current_view.include_view(view_name)
     end
 
+    # Specify a view that needs to be excluded from the current view.
+    #
+    # @param view_name [Symbol] the view to exclude from the current view.
+    # PURPOSE: Though excludes can be used to exclude several fields. If all the excluded fields are from a single view, then exclude_view
+    # is a more refined and usable option
+    #
+    # @example Excluding a view from a dervied view
+    #   class UserBlueprint < Blueprinter::Base
+    #     # other code...
+    #     view :normal do
+    #       fields :first_name, :last_name
+    #     end
+    #
+    #     view :descriptive do
+    #        field :get_full_name, name: :name
+    #        view :extended
+    #        exclude_view :normal
+    #     end
+    #
+    #     view :additional_info do
+    #        fields :time_zone, :language
+    #     end
+    #
+    #     view :extended do
+    #       include_view :normal
+    #       include_view :additional_info
+    #       field :description
+    #     end
+    #
+    #     #=> [:first_name, :last_name, :description]
+    #   end
+    #
+    # @return [Array<Symbol>] an array of view names.
+
+    def self.exclude_view(view_name)
+      current_view.exclude_view(view_name)
+    end
+
 
     # Exclude a field that was mixed into the current view.
     #
