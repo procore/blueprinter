@@ -37,6 +37,10 @@ module Blueprinter
       @views[view_name] ||= View.new(view_name)
     end
 
+    def public_view_names
+      @views.keys - [:identifier, :default]
+    end
+
     private
 
     def identifier_fields
