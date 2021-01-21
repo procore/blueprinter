@@ -44,7 +44,12 @@ module Blueprinter
       def object_to_hash(object, view_name:, local_options:)
         result_hash = view_collection.fields_for(view_name).each_with_object({}) do |field, hash|
           next if field.skip?(field.name, object, local_options)
-          hash[field.name] = field.extract(object, local_options)
+
+          begin
+            hash[field.name] = field.extract(object, local_options)
+          rescue
+            raise BlueprinterError, "Error when extracting value. Blueprint: '#{self}'; View: '#{view_name}'; Field: '#{field.name}'"
+          end
         end
         view_collection.transformers(view_name).each do |transformer|
           transformer.transform(result_hash, object, local_options)
