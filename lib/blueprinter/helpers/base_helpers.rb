@@ -47,8 +47,11 @@ module Blueprinter
 
           begin
             hash[field.name] = field.extract(object, local_options)
+          rescue BlueprinterError => e
+            raise e
           rescue
-            raise BlueprinterError, "Error when extracting value. Blueprint: '#{self}'; View: '#{view_name}'; Field: '#{field.name}'"
+            raise BlueprinterError, "Error when extracting value. Blueprint: '#{self}'; "\
+                                  "View: '#{view_name}'; Field: '#{field.name}'"
           end
         end
         view_collection.transformers(view_name).each do |transformer|
