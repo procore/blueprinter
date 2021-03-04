@@ -51,6 +51,8 @@ module Blueprinter
       views[view_name].included_view_names.each do |included_view_name|
         next if view_name == included_view_name
 
+        raise BlueprinterError, "The included view '#{included_view_name}' does not exist - Included in view #{view_name}" unless has_view?(included_view_name)
+
         view_fields, view_excluded_fields = sortable_fields(included_view_name)
         fields = merge_fields(fields, view_fields)
         excluded_fields.merge!(view_excluded_fields)
